@@ -15,8 +15,8 @@ function getProduct(id) {
       let title = document.getElementById("title");
       let description = document.getElementById("description");
       let price = document.getElementById("price");
-
       let imageElement = document.createElement("img");
+      imageElement.setAttribute("id", "item__img")
       imageElement.src = product.imageUrl;
       image[0].appendChild(imageElement);
 
@@ -40,94 +40,55 @@ function getProduct(id) {
 }
 
 getProduct(id);
+let button = document.getElementById("addToCart")
+//j'écoute le clic pour lancer la fonction
+button.addEventListener('click', function (e) {
+  e.preventDefault()
+  //j'ajoute une variable color quantityValue et productOrder avec l'id la quantité et la couleur
+  let colorInput = document.getElementById('colors')
+  let color = colorInput.value;
+  let quantityValue = parseInt(quantity.value);
+  let titleProduct = document.getElementById('title').innerHTML;
+  let imageProduct = document.getElementById('item__img');
+  let srcImage = imageProduct.getAttribute('src');
 
-let button = document.getElementById("addToCart");
-
-button.addEventListener("click", function (e) {
-   // e.preventDefault()
-
-    let colorInput = document.getElementById('colors')
-    let color = colorInput.value;
-
-
-    let productLocalStorage = JSON.parse(localStorage.getItem('orders'));
-    let newProduct = null;
-
-    let articles = { 
-      color: color, 
-       id: id, 
-      };
-
-
-    products = [];
-    products.push(articles);
-
-    
-
-    if (products.some((e) => e.id === articles.id && e.color === articles.color)) {
-
-console.log('ici')
-
-    }else {
-      console.log("non present")
-    }
-
-
- 
-
-
-
-
-   
-   // localStorage.setItem('orders', JSON.stringify(articles))
-
-    /*
-    productLocalStorage.push(articles)
-
-    console.log(newProduct)
-
-    /*
-    // 15/08 début du localStorage
-    
-//je déclare ma variable orders pour assembler tous les résultats
-    let orders = {
+  let productOrder = {
+      id: id,
+      quantity: quantityValue,
       color: color,
-      quantity: quantity.value,
-      id: id
-    };
-    //je déclare objLinea comme étant orders mais traduit en JSON
-    let objLinea = JSON.stringify(orders);
-    //dans le localStorage, je place créé mon tableau orders où je place objLinea
-    localStorage.setItem("orders", objLinea);
-    
-    //------test------
-    /*let valueOfName = document.getElementById("title").value;
-    console.log(parentOfName)*/
-    
-    //alert(orders);
+      nameProduct: titleProduct,
+      srcImage: srcImage,
+  };
 
+//je déclare ma variable cart le contenu de l'objet products
+  let cart = localStorage.getItem('products');
 
-   // exemple Christophe localStorage.setItem('toto', JSON.stringify(productOrder));
+  //si la cart n'existe pas, je la créé
+  if (cart === null) {
+      cart = [];
+  //sinon je l'ajoute en JSON à la cart
+  } else {
+      cart = JSON.parse(cart);productOrder
+  }
+  //jusqu'à preuve du contraire, c'est un nouvel item,
+  let newItem = true;
 
+  //je boucle la variable produit avec le nombre de cart créé
+  for (let produit of cart) {
+      //si le titre du produit est strictement égal au produit déjà ajouté, et si c'est la même couleur
+      if (productOrder.title === produit.title && productOrder.color === produit.color) {
+          //donc il faut ajouter la quantité des deux commandes
+          produit.quantity += productOrder.quantity;
+          //dans ce cas, ça n'est plus un nouvel objet
+          newItem = false;
+      }
+  }
 
+  //si nexItem est déclaré strictement vraie
+  if (newItem === true) {
+      //j'ajoute l'élément productOrder
+      cart.push(productOrder);
+  }
 
-    // JSON.stringify pour push dans le panier 
-    // localstorage.getItem()
-    // localstorage.setItem()
-    // Créer le localstorage si il n'existe pas
-
-    // Créer un objet pour le push dans le localstorage
-
-    // JS push https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Array/push
-
-    
-    
-
-    
-    
-
-
-    
-
+  localStorage.setItem('products', JSON.stringify(cart));
 });
-
