@@ -22,22 +22,17 @@ function loopSearchId(api, products) {
       for (let data of api) {
         if (product.id === data._id) {
           createProductCard(data, product);
-          
+
+          let dataPrice = data.price
+          let productQuantity = product.quantity 
+          let TotalItemsPrice = dataPrice * productQuantity   
+          console.log(TotalItemsPrice)
         }
       }
     }
   }
   changeQty(api, products);
 }
-//   function calculArticlePrice(api, products){
-//           let number = product.quantity;
-//           let dataPrice = data.price;
-//           totalArticlePrice =  dataPrice * number;
-//           console.log('ici')
-//           console.log(product);
-//   }
-// calculArticlePrice()
-
         // TODO :: Function prix total
         // Quantité panier
 
@@ -74,9 +69,12 @@ function createProductCard(data, product) {
   cartItemDescription.appendChild(cartItemColor);
 
   let cartItemPrice = document.createElement("p");
-  function totalPriceCalcul (){
+function totalPriceCalcul (){
   let totalPrice = data.price * product.quantity;
   cartItemPrice.innerText = totalPrice + " €";
+  let stringInside = cartItemPrice.innerText
+  let stringToNumber = parseFloat(stringInside);
+  //console.log(stringToNumber);
   };
   totalPriceCalcul();
   cartItemDescription.appendChild(cartItemPrice);
@@ -115,7 +113,6 @@ function createProductCard(data, product) {
   suppr.innerHTML = "Supprimer";
 }
 
-
 //change quantity
 function changeQty(api, products){
   const inputs = document.querySelectorAll('.itemQuantity');
@@ -124,17 +121,38 @@ function changeQty(api, products){
       const product = input.closest('article');
       const productId = product.dataset.id;
       const productColor = product.dataset.color;
-      totalPriceCalcul ();
+      
       if(products.some((e) => e.id === productId && e.color === productColor)){
         let objIndex = products.findIndex((product) => product.id === productId && product.color === productColor)
           products[objIndex].quantity = input.valueAsNumber        
       }
-
       let productJson = JSON.stringify(products);
       localStorage.setItem('products' , productJson)
+      fetch("http://localhost:3000/api/products")
+        .then(function(res) {
+            if (res.ok) {
+                return res.json();
+                
+            console.log(products)
+            }
+        })
+function calculQuantity(){
+      for (let i = 0; i < products.length; i++){
+        let productId = (products[i].id)
+        let quantityArticle = (products[i].quantity)
+
+        if (productId === products[i].id){
+          console.log(products.price)
+        }
+        //totalTout = quantityArticle * product.price
+        }
+      }
+      calculQuantity()
 
       // TODO :: Recalculer le prix total (lancer function prix total)
       // TODO :: Recalculer la quantité de produit dans le panier avec dans l'écoute de l'input la fonction de calcul
     });
   });
 }
+
+//console.log(stringToNumber)
