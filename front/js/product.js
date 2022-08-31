@@ -59,7 +59,6 @@ button.addEventListener('click', function (e) {
       nameProduct: titleProduct,
       srcImage: srcImage,
   };
-
 //je déclare ma variable cart le contenu de l'objet products
   let cart = localStorage.getItem('products');
 
