@@ -16,25 +16,23 @@ fetch("http://localhost:3000/api/products")
 function loopSearchId(api, products) {
   if (products === null || products.length === 0) {
     // TODO :: Afficher un h2 avec panier vide
-    console.log("Je suis vide");
   } else {
     for (let product of products) {
       for (let data of api) {
         if (product.id === data._id) {
           createProductCard(data, product);
-
-          let dataPrice = data.price
-          let productQuantity = product.quantity 
-          let TotalItemsPrice = dataPrice * productQuantity   
-          console.log(TotalItemsPrice)
+          lootTotalQty(products);
         }
       }
     }
   }
+  loopTotalPrice(api, products);
   changeQty(api, products);
 }
-        // TODO :: Function prix total
-        // Quantité panier
+
+//j'ai été déconnecté comme normalement(ces temps -ci) mais impossible de me connecter à nouveau
+// TODO :: Function prix total
+// Quantité panier
 
 //je créé les balises et le contenu du DOM
 function createProductCard(data, product) {
@@ -69,13 +67,13 @@ function createProductCard(data, product) {
   cartItemDescription.appendChild(cartItemColor);
 
   let cartItemPrice = document.createElement("p");
-function totalPriceCalcul (){
-  let totalPrice = data.price * product.quantity;
-  cartItemPrice.innerText = totalPrice + " €";
-  let stringInside = cartItemPrice.innerText
-  let stringToNumber = parseFloat(stringInside);
-  //console.log(stringToNumber);
-  };
+  function totalPriceCalcul() {
+    let totalPrice = data.price * product.quantity;
+    cartItemPrice.innerText = totalPrice + " €";
+    //let stringInside = cartItemPrice.innerText;
+    //let stringToNumber = (parseFloatstringInside);
+    //console.log(stringToNumber);
+  }
   totalPriceCalcul();
   cartItemDescription.appendChild(cartItemPrice);
 
@@ -114,40 +112,27 @@ function totalPriceCalcul (){
 }
 
 //change quantity
-function changeQty(api, products){
-  const inputs = document.querySelectorAll('.itemQuantity');
-  inputs.forEach((input) =>{
-    input.addEventListener('change', function () {
-      const product = input.closest('article');
+function changeQty(api, products) {
+  const inputs = document.querySelectorAll(".itemQuantity");
+  inputs.forEach((input) => {
+    input.addEventListener("change", function () {
+      const product = input.closest("article");
       const productId = product.dataset.id;
       const productColor = product.dataset.color;
-      
-      if(products.some((e) => e.id === productId && e.color === productColor)){
-        let objIndex = products.findIndex((product) => product.id === productId && product.color === productColor)
-          products[objIndex].quantity = input.valueAsNumber        
+
+      if (
+        products.some((e) => e.id === productId && e.color === productColor)
+      ) {
+        let objIndex = products.findIndex(
+          (product) =>
+            product.id === productId && product.color === productColor
+        );
+        products[objIndex].quantity = input.valueAsNumber;
       }
       let productJson = JSON.stringify(products);
-      localStorage.setItem('products' , productJson)
-      fetch("http://localhost:3000/api/products")
-        .then(function(res) {
-            if (res.ok) {
-                return res.json();
-                
-            console.log(products)
-            }
-        })
-function calculQuantity(){
-      for (let i = 0; i < products.length; i++){
-        let productId = (products[i].id)
-        let quantityArticle = (products[i].quantity)
-
-        if (productId === products[i].id){
-          console.log(products.price)
-        }
-        //totalTout = quantityArticle * product.price
-        }
-      }
-      calculQuantity()
+      localStorage.setItem("products", productJson);
+      lootTotalQty(JSON.parse(productJson));
+      loopTotalPrice(api, JSON.parse(productJson));
 
       // TODO :: Recalculer le prix total (lancer function prix total)
       // TODO :: Recalculer la quantité de produit dans le panier avec dans l'écoute de l'input la fonction de calcul
@@ -155,4 +140,89 @@ function calculQuantity(){
   });
 }
 
-//console.log(stringToNumber)
+function lootTotalQty(products) {
+  let sum = 0;
+  for (let product of products) {
+    sum = sum + product.quantity;
+  }
+  document.getElementById("totalQuantity").innerText = sum;
+}
+
+function loopTotalPrice(api, products) {
+  let sumPrice = 0;
+  if (products !== null) {
+    api.forEach((data) => {
+      if (products.some((e) => e.id === data._id)) {
+        let objIndex = products.findIndex((product) => product.id === data._id);
+        sumPrice = sumPrice + data.price * products[objIndex].quantity;
+      }
+      document.getElementById("totalPrice").innerText = sumPrice;
+    });
+  }
+}
+
+//récupération du formulaire
+
+let inputEmail = document.getElementById("email");
+email.addEventListener("change", function () {
+  validEmail(this);
+});
+
+function validEmail(inputEmail) {
+  let emailRegex = new RegExp("^[A-Za-z-_]+@[A-Za-z]+.[A-Za-z]+$");
+
+  if (!emailRegex.test(inputEmail.value)) {
+    console.log("email non valide");
+    return false;
+  } else {
+    console.log("email valide");
+    return true;
+  }
+}
+
+let order = document.getElementById("order");
+order.addEventListener("click", function (e) {
+  e.preventDefault();
+
+  let products = JSON.parse(localStorage.getItem("products"));
+
+  if (products === null || products.length < 1) {
+    alert("JE SUIS VIDE");
+  } else if (validEmail(inputEmail)) {
+    const productsId = [];
+    products.forEach((product) => {
+      productsId.push(product.id);
+    });
+
+    const order = {
+      contact: {
+        firstName: "toto",
+        lastName: "tutu",
+        address: "grd",
+        city: "grdg",
+        email: inputEmail.value,
+      },
+      products: productsId,
+    };
+    orderProducts(order)
+
+  }
+});
+
+
+const orderProducts = (order) => {
+  console.log(order)
+  fetch("http://localhost:3000/api/products/order", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-type": "application/JSON",
+    },
+    body: JSON.stringify(order),
+  })
+    .then((data) => data.json())
+    .then((data) => {      
+      const orderId = data.orderId;
+
+    })
+};
