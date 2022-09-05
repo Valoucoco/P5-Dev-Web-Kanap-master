@@ -44,4 +44,3 @@ function insertProductInHtml(product) {
 
     itemsContainer.appendChild(anchor);
 }
-

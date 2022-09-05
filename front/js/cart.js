@@ -162,14 +162,13 @@ function loopTotalPrice(api, products) {
 }
 
 //récupération du formulaire
-
+//-----------E-mail-----------
 let inputEmail = document.getElementById("email");
 email.addEventListener("change", function () {
   validEmail(this);
 });
-
 function validEmail(inputEmail) {
-  let emailRegex = new RegExp("^[A-Za-z-_]+@[A-Za-z]+.[A-Za-z]+$");
+  let emailRegex = new RegExp("^[A-Z+.+a-z-_]+@[A-Za-z]+.[A-Za-z]+$");
 
   if (!emailRegex.test(inputEmail.value)) {
     console.log("email non valide");
@@ -179,6 +178,79 @@ function validEmail(inputEmail) {
     return true;
   }
 }
+//-----------fin/E-mail-----------
+//-----------firstName-----------
+let inputFirstName = document.getElementById("firstName");
+
+firstName.addEventListener("change", function () {
+  validfirstName(this);
+});
+function validfirstName(inputFirstName) {
+  let firstNameRegex = new RegExp("^[A-Z+.++-+a-z-_]+$");
+
+  if (!firstNameRegex.test(inputFirstName.value)) {
+    console.log("first name non valide");
+    return false;
+  } else {
+    console.log("first name valide");
+    return true;
+  }
+}
+//-----------fin/firstName-----------
+//-----------lastName-----------
+let inputLastName = document.getElementById("lastName");
+
+lastName.addEventListener("change", function () {
+  validLastName(this);
+});
+function validLastName(inputLastName) {
+  let lastNameRegex = new RegExp("^[A-Z+.++-+a-z-_]+$");
+
+  if (!lastNameRegex.test(inputLastName.value)) {
+    console.log("last name non valide");
+    return false;
+  } else {
+    console.log("last name valide");
+    return true;
+  }
+}
+//-----------fin/lastName-----------
+//-----------adress-----------
+let inputAddress = document.getElementById("address");
+
+inputAddress.addEventListener("change", function () {
+  validAddress(this);
+});
+function validAddress(inputAddress) {
+  //let addressRegex = new RegExp("^[A-Z+.+a-z-_]+@[A-Za-z]+.[A-Za-z]+$");
+
+  if (inputAddress == null) {
+    console.log("address non valide");
+    return false;
+  } else {
+    console.log("address valide");
+    return true;
+  }
+}
+//-----------fin/adress-----------
+//-----------city-----------
+let inputCity = document.getElementById("city");
+
+inputCity.addEventListener("change", function () {
+  validCity(this);
+});
+function validCity(inputCity) {
+  let cityRegex = new RegExp("^[A-Z+.++-+a-z-_]+$");
+
+  if (inputCity.value == null) {
+    console.log("city non valide");
+    return false;
+  } else {
+    console.log("city valide");
+    return true;
+  }
+}
+//-----------fin/city-----------
 
 let order = document.getElementById("order");
 order.addEventListener("click", function (e) {
@@ -196,16 +268,15 @@ order.addEventListener("click", function (e) {
 
     const order = {
       contact: {
-        firstName: "toto",
-        lastName: "tutu",
-        address: "grd",
-        city: "grdg",
+        firstName: inputFirstName.value,
+        lastName: inputLastName.value,
+        address: inputAddress.value,
+        city: inputCity.value,
         email: inputEmail.value,
       },
       products: productsId,
     };
     orderProducts(order)
-
   }
 });
 
@@ -223,6 +294,11 @@ const orderProducts = (order) => {
     .then((data) => data.json())
     .then((data) => {      
       const orderId = data.orderId;
-
-    })
+      console.log(orderId)
+      finalisation(orderId)
+    })    
+    function finalisation(orderId) {
+      localStorage.clear();
+      document.location.href = `confirmation.html?id=${orderId}`;
+    }
 };
