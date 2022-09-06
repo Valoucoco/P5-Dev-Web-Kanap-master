@@ -15,7 +15,12 @@ fetch("http://localhost:3000/api/products")
 //je comprare mon localStorage à l'API products, se qui est similaire s'affiche
 function loopSearchId(api, products) {
   if (products === null || products.length === 0) {
-    // TODO :: Afficher un h2 avec panier vide
+
+    //je modifie le h1 avec 'Votre panier est vide'
+    let cartAndFormContainer = document.querySelector("#cartAndFormContainer > h1");
+    cartAndFormContainer.innerHTML = 'Votre panier est vide';
+
+
   } else {
     for (let product of products) {
       for (let data of api) {
@@ -29,16 +34,11 @@ function loopSearchId(api, products) {
   loopTotalPrice(api, products);
   changeQty(api, products);
 }
-
-//j'ai été déconnecté comme normalement(ces temps -ci) mais impossible de me connecter à nouveau
-// TODO :: Function prix total
-// Quantité panier
-
 //je créé les balises et le contenu du DOM
 function createProductCard(data, product) {
   const article = document.createElement("article");
   article.classList.add("cart__item");
-  cart__items.appendChild(article);
+  cart__items.appendChild("article");
   article.setAttribute("data-id", product.id);
   article.setAttribute("data-color", product.color);
 
@@ -67,14 +67,8 @@ function createProductCard(data, product) {
   cartItemDescription.appendChild(cartItemColor);
 
   let cartItemPrice = document.createElement("p");
-  function totalPriceCalcul() {
-    let totalPrice = data.price * product.quantity;
-    cartItemPrice.innerText = totalPrice + " €";
-    //let stringInside = cartItemPrice.innerText;
-    //let stringToNumber = (parseFloatstringInside);
-    //console.log(stringToNumber);
-  }
-  totalPriceCalcul();
+  totalPrice = data.price;
+  cartItemPrice.innerText = totalPrice + " €";
   cartItemDescription.appendChild(cartItemPrice);
 
   let contentSettings = document.createElement("div");
@@ -133,9 +127,6 @@ function changeQty(api, products) {
       localStorage.setItem("products", productJson);
       lootTotalQty(JSON.parse(productJson));
       loopTotalPrice(api, JSON.parse(productJson));
-
-      // TODO :: Recalculer le prix total (lancer function prix total)
-      // TODO :: Recalculer la quantité de produit dans le panier avec dans l'écoute de l'input la fonction de calcul
     });
   });
 }
@@ -164,14 +155,15 @@ function loopTotalPrice(api, products) {
 //récupération du formulaire
 //-----------E-mail-----------
 let inputEmail = document.getElementById("email");
-email.addEventListener("change", function () {
+inputEmail.addEventListener("change", function () {
   validEmail(this);
 });
 function validEmail(inputEmail) {
-  let emailRegex = new RegExp("^[A-Z+.+a-z-_]+@[A-Za-z]+.[A-Za-z]+$");
+  let emailRegex = new RegExp("^[A-Za-z-_](?.[A-Za-z])+@[A-Za-z]+.[A-Za-z]+$");
 
   if (!emailRegex.test(inputEmail.value)) {
-    console.log("email non valide");
+    let errorMessageEmail = document.getElementById('emailErrorMsg')
+    errorMessageEmail.innerHTML = 'Merci d\'ajouter un Email valide'
     return false;
   } else {
     console.log("email valide");
@@ -182,14 +174,15 @@ function validEmail(inputEmail) {
 //-----------firstName-----------
 let inputFirstName = document.getElementById("firstName");
 
-firstName.addEventListener("change", function () {
+inputFirstName.addEventListener("change", function () {
   validfirstName(this);
 });
 function validfirstName(inputFirstName) {
-  let firstNameRegex = new RegExp("^[A-Z+.++-+a-z-_]+$");
+  let firstNameRegex = new RegExp("^[A-Z+.+-+a-z-_]+$");
 
   if (!firstNameRegex.test(inputFirstName.value)) {
-    console.log("first name non valide");
+    let firstNameErrorMsg = document.getElementById('firstNameErrorMsg')
+    firstNameErrorMsg.innerHTML = 'Merci d\'ajouter un prénom valide'
     return false;
   } else {
     console.log("first name valide");
@@ -200,14 +193,16 @@ function validfirstName(inputFirstName) {
 //-----------lastName-----------
 let inputLastName = document.getElementById("lastName");
 
-lastName.addEventListener("change", function () {
+inputLastName.addEventListener("change", function () {
   validLastName(this);
 });
 function validLastName(inputLastName) {
   let lastNameRegex = new RegExp("^[A-Z+.++-+a-z-_]+$");
 
   if (!lastNameRegex.test(inputLastName.value)) {
-    console.log("last name non valide");
+    
+    let lastNameErrorMsg = document.getElementById('lastNameErrorMsg')
+    lastNameErrorMsg.innerHTML = 'Merci d\'ajouter un nom valide'
     return false;
   } else {
     console.log("last name valide");
@@ -222,10 +217,10 @@ inputAddress.addEventListener("change", function () {
   validAddress(this);
 });
 function validAddress(inputAddress) {
-  //let addressRegex = new RegExp("^[A-Z+.+a-z-_]+@[A-Za-z]+.[A-Za-z]+$");
-
   if (inputAddress == null) {
-    console.log("address non valide");
+    
+    let addressErrorMsg = document.getElementById('addressErrorMsg')
+    addressErrorMsg.innerHTML = 'Merci d\'ajouter une adresse postale'
     return false;
   } else {
     console.log("address valide");
@@ -242,8 +237,10 @@ inputCity.addEventListener("change", function () {
 function validCity(inputCity) {
   let cityRegex = new RegExp("^[A-Z+.++-+a-z-_]+$");
 
-  if (inputCity.value == null) {
-    console.log("city non valide");
+  if (!cityRegex.test(inputCity.value)) {
+    
+    let cityErrorMsg = document.getElementById('cityErrorMsg')
+    cityErrorMsg.innerHTML = 'Merci d\'ajouter une ville valide'
     return false;
   } else {
     console.log("city valide");
@@ -259,7 +256,7 @@ order.addEventListener("click", function (e) {
   let products = JSON.parse(localStorage.getItem("products"));
 
   if (products === null || products.length < 1) {
-    alert("JE SUIS VIDE");
+    alert("VOTRE PANIER EST VIDE");
   } else if (validEmail(inputEmail)) {
     const productsId = [];
     products.forEach((product) => {
@@ -282,7 +279,6 @@ order.addEventListener("click", function (e) {
 
 
 const orderProducts = (order) => {
-  console.log(order)
   fetch("http://localhost:3000/api/products/order", {
     method: "POST",
     headers: {
@@ -294,7 +290,6 @@ const orderProducts = (order) => {
     .then((data) => data.json())
     .then((data) => {      
       const orderId = data.orderId;
-      console.log(orderId)
       finalisation(orderId)
     })    
     function finalisation(orderId) {
