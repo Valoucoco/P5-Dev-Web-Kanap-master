@@ -63,10 +63,11 @@ button.addEventListener('click', function (e) {
   let cart = localStorage.getItem('products');
 
   //si la cart n'existe pas, je la créé
-  if (cart === null) {
+  if (cart === null && quantityValue != 0)  {
       cart = [];
   //sinon je l'ajoute en JSON à la cart
-  } else {
+  }
+   else {
       cart = JSON.parse(cart);productOrder
   }
   //jusqu'à preuve du contraire, c'est un nouvel item,
