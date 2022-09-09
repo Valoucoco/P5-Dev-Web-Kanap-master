@@ -34,11 +34,12 @@ function loopSearchId(api, products) {
   loopTotalPrice(api, products);
   changeQty(api, products);
 }
+
 //je créé les balises et le contenu du DOM
 function createProductCard(data, product) {
   const article = document.createElement("article");
   article.classList.add("cart__item");
-  cart__items.appendChild("article");
+  cart__items.appendChild(article);
   article.setAttribute("data-id", product.id);
   article.setAttribute("data-color", product.color);
 

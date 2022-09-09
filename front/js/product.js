@@ -52,6 +52,8 @@ button.addEventListener('click', function (e) {
   let imageProduct = document.getElementById('item__img');
   let srcImage = imageProduct.getAttribute('src');
 
+
+  //je déclare ma variable avec les informations du produit séléctionné
   let productOrder = {
       id: id,
       quantity: quantityValue,
@@ -59,15 +61,21 @@ button.addEventListener('click', function (e) {
       nameProduct: titleProduct,
       srcImage: srcImage,
   };
+  console.log(color)
+let validator = true
+  if (color == 0){
+    alert("Merci de choisir votre couleur ET votre nombre d'article");
+    validator = false;
+  }
+
 //je déclare ma variable cart le contenu de l'objet products
   let cart = localStorage.getItem('products');
 
   //si la cart n'existe pas, je la créé
-  if (cart === null && quantityValue != 0)  {
+  if (cart === null)  {
       cart = [];
   //sinon je l'ajoute en JSON à la cart
-  }
-   else {
+  } else {
       cart = JSON.parse(cart);productOrder
   }
   //jusqu'à preuve du contraire, c'est un nouvel item,
@@ -89,6 +97,8 @@ button.addEventListener('click', function (e) {
       //j'ajoute l'élément productOrder
       cart.push(productOrder);
   }
-
+  console.log(validator)
+  if (validator === true){
   localStorage.setItem('products', JSON.stringify(cart));
+  }
 });
