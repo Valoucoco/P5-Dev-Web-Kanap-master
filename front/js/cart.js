@@ -26,13 +26,14 @@ function loopSearchId(api, products) {
       for (let data of api) {
         if (product.id === data._id) {
           createProductCard(data, product);
-          lootTotalQty(products);
+          loopTotalQty(products);
         }
       }
     }
   }
   loopTotalPrice(api, products);
   changeQty(api, products);
+  deleteItemSelect(api, products)
 }
 
 //je créé les balises et le contenu du DOM
@@ -102,6 +103,7 @@ function createProductCard(data, product) {
 
   let suppr = document.createElement("p");
   suppr.classList.add("deleteItem");
+  suppr.setAttribute ("id","deleteItem")
   contentSettingsDelete.appendChild(suppr);
   suppr.innerHTML = "Supprimer";
 }
@@ -126,20 +128,20 @@ function changeQty(api, products) {
       }
       let productJson = JSON.stringify(products);
       localStorage.setItem("products", productJson);
-      lootTotalQty(JSON.parse(productJson));
+      loopTotalQty(JSON.parse(productJson));
       loopTotalPrice(api, JSON.parse(productJson));
     });
   });
 }
-
-function lootTotalQty(products) {
+//boucle pour chaque produit la quantité s'ajoute à sum
+function loopTotalQty(products) {
   let sum = 0;
   for (let product of products) {
     sum = sum + product.quantity;
   }
   document.getElementById("totalQuantity").innerText = sum;
 }
-
+//boucle pour chaque produit identique entre le panier et le locahost
 function loopTotalPrice(api, products) {
   let sumPrice = 0;
   if (products !== null) {
@@ -152,12 +154,53 @@ function loopTotalPrice(api, products) {
     });
   }
 }
+// supprimer
+function deleteItemSelect(api, products) {
+  
+    // Ces deux variables permettent de supprimer un objet via son ID et sa couleur.
+    let supprimerId = products[i].id;
+    let supprimerCouleur = products[0].color;
+    for (let product of products) {
+      for (let data of api) {
+        if (product.id === data._id) {
+
+        }
+      }
+    }
+const deleteButton = document.querySelectorAll('.cart__item__content__settings__delete > .deleteItem'); //ok
+console.log(supprimerId)
+/*for (let i = 0; i < products.length; i ++){
+  deleteButton[i].addEventListener('click', (e) => {
+    e.preventDefault();
+    console.log(supprimerCouleur)
+    
+
+    // Filtre les objets n'ayant pas la même ID ou même couleur que l'élément cliqué
+    if (supprimerId === produit.title && supprimerCouleur === produit.color) {
+      //donc il faut ajouter la quantité des deux commandes
+      console.log('top !')
+      //dans ce cas, ça n'est plus un nouvel objet
+      newItem = false;
+  }
+    // Effectue les modifications dans le local storage en transformant en chaine de caractère grâce à stringify.
+    localStorage.setItem("product",JSON.stringify(products));
+    
+    // Pop-up alerte indiquant à l'usager que le produit séléctionné a bien été supprimer
+    alert('Cette élement a bien été supprimer du panier');
+
+    // Rechargement de la page pour prendre en compte les modifications
+    //location.reload();
+  })
+}*/
+
+}
+
 
 //récupération du formulaire
 //-----------E-mail-----------
 let inputEmail = document.getElementById("email");
 inputEmail.addEventListener("change", function () {
-  validEmail(this);
+  validEmail(this)
 });
 function validEmail(inputEmail) {
   let emailRegex = new RegExp("^[A-Za-z-_](?.[A-Za-z])+@[A-Za-z]+.[A-Za-z]+$");
