@@ -97,8 +97,8 @@ let validator = true
       //j'ajoute l'élément productOrder
       cart.push(productOrder);
   }
-  console.log(validator)
   if (validator === true){
   localStorage.setItem('products', JSON.stringify(cart));
+  alert('Un produit à été ajouté à votre panier')
   }
 });

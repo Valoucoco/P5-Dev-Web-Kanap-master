@@ -15,12 +15,11 @@ fetch("http://localhost:3000/api/products")
 //je comprare mon localStorage à l'API products, se qui est similaire s'affiche
 function loopSearchId(api, products) {
   if (products === null || products.length === 0) {
-
     //je modifie le h1 avec 'Votre panier est vide'
-    let cartAndFormContainer = document.querySelector("#cartAndFormContainer > h1");
-    cartAndFormContainer.innerHTML = 'Votre panier est vide';
-
-
+    let cartAndFormContainer = document.querySelector(
+      "#cartAndFormContainer > h1"
+    );
+    cartAndFormContainer.innerHTML = "Votre panier est vide";
   } else {
     for (let product of products) {
       for (let data of api) {
@@ -33,7 +32,7 @@ function loopSearchId(api, products) {
   }
   loopTotalPrice(api, products);
   changeQty(api, products);
-  deleteItemSelect(api, products)
+  deleteItemSelect(api, products);
 }
 
 //je créé les balises et le contenu du DOM
@@ -69,8 +68,7 @@ function createProductCard(data, product) {
   cartItemDescription.appendChild(cartItemColor);
 
   let cartItemPrice = document.createElement("p");
-  totalPrice = data.price;
-  cartItemPrice.innerText = totalPrice + " €";
+  cartItemPrice.innerText = data.price + " €";
   cartItemDescription.appendChild(cartItemPrice);
 
   let contentSettings = document.createElement("div");
@@ -103,7 +101,7 @@ function createProductCard(data, product) {
 
   let suppr = document.createElement("p");
   suppr.classList.add("deleteItem");
-  suppr.setAttribute ("id","deleteItem")
+  suppr.setAttribute("id", "deleteItem");
   contentSettingsDelete.appendChild(suppr);
   suppr.innerHTML = "Supprimer";
 }
@@ -141,7 +139,7 @@ function loopTotalQty(products) {
   }
   document.getElementById("totalQuantity").innerText = sum;
 }
-//boucle pour chaque produit identique entre le panier et le locahost
+//boucle pour chaque produit identique entre le panier et le localhost
 function loopTotalPrice(api, products) {
   let sumPrice = 0;
   if (products !== null) {
@@ -151,63 +149,48 @@ function loopTotalPrice(api, products) {
         sumPrice = sumPrice + data.price * products[objIndex].quantity;
       }
       document.getElementById("totalPrice").innerText = sumPrice;
+      console.log(sumPrice)
     });
   }
 }
 // supprimer
 function deleteItemSelect(api, products) {
-  
-    // Ces deux variables permettent de supprimer un objet via son ID et sa couleur.
-    let supprimerId = products[i].id;
-    let supprimerCouleur = products[0].color;
-    for (let product of products) {
-      for (let data of api) {
-        if (product.id === data._id) {
-
-        }
+  // Ces deux variables permettent de supprimer un objet via son ID et sa couleur.
+  const itemDelete = document.querySelectorAll(".deleteItem");
+  itemDelete.forEach((item) => {
+    item.addEventListener("click", function () {
+      const product = item.closest("article");
+      product.remove();
+      const productId = product.dataset.id;
+      const productColor = product.dataset.color;
+      if (
+        products.some((e) => e.id === productId && e.color === productColor)
+      ) {
+        let objIndex = products.findIndex(
+          (product) =>
+            product.id === productId && product.color === productColor
+        );
+        products.splice(objIndex, 1);
+        let productsJson = JSON.stringify(products);
+        localStorage.setItem("products", productsJson);
+        location.reload();
       }
-    }
-const deleteButton = document.querySelectorAll('.cart__item__content__settings__delete > .deleteItem'); //ok
-console.log(supprimerId)
-/*for (let i = 0; i < products.length; i ++){
-  deleteButton[i].addEventListener('click', (e) => {
-    e.preventDefault();
-    console.log(supprimerCouleur)
-    
-
-    // Filtre les objets n'ayant pas la même ID ou même couleur que l'élément cliqué
-    if (supprimerId === produit.title && supprimerCouleur === produit.color) {
-      //donc il faut ajouter la quantité des deux commandes
-      console.log('top !')
-      //dans ce cas, ça n'est plus un nouvel objet
-      newItem = false;
-  }
-    // Effectue les modifications dans le local storage en transformant en chaine de caractère grâce à stringify.
-    localStorage.setItem("product",JSON.stringify(products));
-    
-    // Pop-up alerte indiquant à l'usager que le produit séléctionné a bien été supprimer
-    alert('Cette élement a bien été supprimer du panier');
-
-    // Rechargement de la page pour prendre en compte les modifications
-    //location.reload();
-  })
-}*/
-
+    });
+  });
 }
-
 
 //récupération du formulaire
 //-----------E-mail-----------
 let inputEmail = document.getElementById("email");
 inputEmail.addEventListener("change", function () {
-  validEmail(this)
+  validEmail(this);
 });
 function validEmail(inputEmail) {
   let emailRegex = new RegExp("^[A-Za-z-_](?.[A-Za-z])+@[A-Za-z]+.[A-Za-z]+$");
 
   if (!emailRegex.test(inputEmail.value)) {
-    let errorMessageEmail = document.getElementById('emailErrorMsg')
-    errorMessageEmail.innerHTML = 'Merci d\'ajouter un Email valide'
+    let errorMessageEmail = document.getElementById("emailErrorMsg");
+    errorMessageEmail.innerHTML = "Merci d'ajouter un Email valide";
     return false;
   } else {
     console.log("email valide");
@@ -225,8 +208,8 @@ function validfirstName(inputFirstName) {
   let firstNameRegex = new RegExp("^[A-Z+.+-+a-z-_]+$");
 
   if (!firstNameRegex.test(inputFirstName.value)) {
-    let firstNameErrorMsg = document.getElementById('firstNameErrorMsg')
-    firstNameErrorMsg.innerHTML = 'Merci d\'ajouter un prénom valide'
+    let firstNameErrorMsg = document.getElementById("firstNameErrorMsg");
+    firstNameErrorMsg.innerHTML = "Merci d'ajouter un prénom valide";
     return false;
   } else {
     console.log("first name valide");
@@ -244,9 +227,8 @@ function validLastName(inputLastName) {
   let lastNameRegex = new RegExp("^[A-Z+.++-+a-z-_]+$");
 
   if (!lastNameRegex.test(inputLastName.value)) {
-    
-    let lastNameErrorMsg = document.getElementById('lastNameErrorMsg')
-    lastNameErrorMsg.innerHTML = 'Merci d\'ajouter un nom valide'
+    let lastNameErrorMsg = document.getElementById("lastNameErrorMsg");
+    lastNameErrorMsg.innerHTML = "Merci d'ajouter un nom valide";
     return false;
   } else {
     console.log("last name valide");
@@ -262,9 +244,8 @@ inputAddress.addEventListener("change", function () {
 });
 function validAddress(inputAddress) {
   if (inputAddress == null) {
-    
-    let addressErrorMsg = document.getElementById('addressErrorMsg')
-    addressErrorMsg.innerHTML = 'Merci d\'ajouter une adresse postale'
+    let addressErrorMsg = document.getElementById("addressErrorMsg");
+    addressErrorMsg.innerHTML = "Merci d'ajouter une adresse postale";
     return false;
   } else {
     console.log("address valide");
@@ -282,9 +263,8 @@ function validCity(inputCity) {
   let cityRegex = new RegExp("^[A-Z+.++-+a-z-_]+$");
 
   if (!cityRegex.test(inputCity.value)) {
-    
-    let cityErrorMsg = document.getElementById('cityErrorMsg')
-    cityErrorMsg.innerHTML = 'Merci d\'ajouter une ville valide'
+    let cityErrorMsg = document.getElementById("cityErrorMsg");
+    cityErrorMsg.innerHTML = "Merci d'ajouter une ville valide";
     return false;
   } else {
     console.log("city valide");
@@ -317,10 +297,9 @@ order.addEventListener("click", function (e) {
       },
       products: productsId,
     };
-    orderProducts(order)
+    orderProducts(order);
   }
 });
-
 
 const orderProducts = (order) => {
   fetch("http://localhost:3000/api/products/order", {
@@ -332,12 +311,12 @@ const orderProducts = (order) => {
     body: JSON.stringify(order),
   })
     .then((data) => data.json())
-    .then((data) => {      
+    .then((data) => {
       const orderId = data.orderId;
-      finalisation(orderId)
-    })    
-    function finalisation(orderId) {
-      localStorage.clear();
-      document.location.href = `confirmation.html?id=${orderId}`;
-    }
+      finalisation(orderId);
+    });
+  function finalisation(orderId) {
+    localStorage.clear();
+    document.location.href = `confirmation.html?id=${orderId}`;
+  }
 };
