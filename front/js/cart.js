@@ -173,7 +173,7 @@ function deleteItemSelect(api, products) {
         products.splice(objIndex, 1);
         let productsJson = JSON.stringify(products);
         localStorage.setItem("products", productsJson);
-        location.reload();
+        loopTotalPrice(api, products);
       }
     });
   });
