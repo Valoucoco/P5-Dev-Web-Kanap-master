@@ -34,7 +34,6 @@ function loopSearchId(api, products) {
   changeQty(api, products);
   deleteItemSelect(api, products);
 }
-
 //je créé les balises et le contenu du DOM
 function createProductCard(data, product) {
   const article = document.createElement("article");
@@ -144,12 +143,17 @@ function loopTotalPrice(api, products) {
   let sumPrice = 0;
   if (products !== null) {
     api.forEach((data) => {
+
+      
+      let productColor = document.getElementsByTagName("#cart__item__content__description > p")
+console.log(productColor.innerHTML)
+
+
       if (products.some((e) => e.id === data._id)) {
         let objIndex = products.findIndex((product) => product.id === data._id);
         sumPrice = sumPrice + data.price * products[objIndex].quantity;
       }
       document.getElementById("totalPrice").innerText = sumPrice;
-      console.log(sumPrice)
     });
   }
 }
