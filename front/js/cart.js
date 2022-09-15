@@ -126,7 +126,8 @@ function changeQty(api, products) {
       let productJson = JSON.stringify(products);
       localStorage.setItem("products", productJson);
       loopTotalQty(JSON.parse(productJson));
-      loopTotalPrice(api, JSON.parse(productJson));
+      
+      loopTotalPrice(api, products)
     });
   });
 }
@@ -138,23 +139,20 @@ function loopTotalQty(products) {
   }
   document.getElementById("totalQuantity").innerText = sum;
 }
-//boucle pour chaque produit identique entre le panier et le localhost
+
+//boucle pour calculer le prix total
 function loopTotalPrice(api, products) {
   let sumPrice = 0;
+  
+
   if (products !== null) {
-    api.forEach((data) => {
-
-      
-      let productColor = document.getElementsByTagName("#cart__item__content__description > p")
-console.log(productColor.innerHTML)
-
-
-      if (products.some((e) => e.id === data._id)) {
-        let objIndex = products.findIndex((product) => product.id === data._id);
-        sumPrice = sumPrice + data.price * products[objIndex].quantity;
-      }
-      document.getElementById("totalPrice").innerText = sumPrice;
-    });
+    let test = products.map(element => {element})
+    for (let i = 0; i < products.length; i++){
+        let product = products[i]
+        let apiProduct = api.find((item) => item.id === product._id)
+        sumPrice += apiProduct.price * product.quantity
+    }
+    document.getElementById("totalPrice").innerText = sumPrice;
   }
 }
 // supprimer
@@ -164,9 +162,11 @@ function deleteItemSelect(api, products) {
   itemDelete.forEach((item) => {
     item.addEventListener("click", function () {
       const product = item.closest("article");
-      product.remove();
+      console.log(product)
+      //product.remove();
       const productId = product.dataset.id;
       const productColor = product.dataset.color;
+      console.log(productColor)
       if (
         products.some((e) => e.id === productId && e.color === productColor)
       ) {
@@ -190,7 +190,8 @@ inputEmail.addEventListener("change", function () {
   validEmail(this);
 });
 function validEmail(inputEmail) {
-  let emailRegex = new RegExp("^[A-Za-z-_](?.[A-Za-z])+@[A-Za-z]+.[A-Za-z]+$");
+  let emailRegex = new RegExp("^[.\w_-]{4,20}@[.\w_-]{1,20}.[a-zA-Z]{2,4}$");
+  //let emailRegex = new RegExp("^[A-Za-z-_]([A-Za-z])+@[A-Za-z]+.[A-Za-z]+$");
 
   if (!emailRegex.test(inputEmail.value)) {
     let errorMessageEmail = document.getElementById("emailErrorMsg");

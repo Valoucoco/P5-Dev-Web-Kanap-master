@@ -99,6 +99,6 @@ let validator = true
   }
   if (validator === true){
   localStorage.setItem('products', JSON.stringify(cart));
-  alert('Un produit à été ajouté à votre panier')
+  alert('Un produit a été ajouté à votre panier')
   }
 });
