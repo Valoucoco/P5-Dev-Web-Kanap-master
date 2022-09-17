@@ -190,14 +190,17 @@ inputEmail.addEventListener("change", function () {
   validEmail(this);
 });
 function validEmail(inputEmail) {
-  let emailRegex = new RegExp("^[.\w_-]{4,20}@[.\w_-]{1,20}.[a-zA-Z]{2,4}$");
-  //let emailRegex = new RegExp("^[A-Za-z-_]([A-Za-z])+@[A-Za-z]+.[A-Za-z]+$");
+  //let emailRegex = new RegExp("^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$");
+  let emailRegex = new RegExp("^[A-Za-z-_.]([A-Za-z.])+@[A-Za-z]+.[A-Za-z]+$");
 
   if (!emailRegex.test(inputEmail.value)) {
     let errorMessageEmail = document.getElementById("emailErrorMsg");
     errorMessageEmail.innerHTML = "Merci d'ajouter un Email valide";
+    console.log(errorMessageEmail)
     return false;
   } else {
+    let errorMessageEmail = document.getElementById("emailErrorMsg");
+    errorMessageEmail.innerHTML = "";
     console.log("email valide");
     return true;
   }
