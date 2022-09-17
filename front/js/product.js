@@ -61,7 +61,6 @@ button.addEventListener('click', function (e) {
       nameProduct: titleProduct,
       srcImage: srcImage,
   };
-  console.log(color)
 let validator = true
   if (color == 0 || quantityValue == 0){
     alert("Merci de choisir votre couleur ET votre nombre d'article");

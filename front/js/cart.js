@@ -161,11 +161,9 @@ function deleteItemSelect(api, products) {
   itemDelete.forEach((item) => {
     item.addEventListener("click", function () {
       const product = item.closest("article");
-      console.log(product)
       product.remove();
       const productId = product.dataset.id;
       const productColor = product.dataset.color;
-      console.log(productColor)
       if (
         products.some((e) => e.id === productId && e.color === productColor)
       ) {
@@ -199,7 +197,8 @@ function validfirstName(inputFirstName) {
     firstNameErrorMsg.innerHTML = "Merci d'ajouter un prénom valide";
     return false;
   } else {
-    console.log("first name valide");
+    let firstNameErrorMsg = document.getElementById("firstNameErrorMsg");
+    firstNameErrorMsg.innerHTML = "";
     return true;
   }
 }
@@ -218,7 +217,8 @@ function validLastName(inputLastName) {
     lastNameErrorMsg.innerHTML = "Merci d'ajouter un nom valide";
     return false;
   } else {
-    console.log("last name valide");
+    let lastNameErrorMsg = document.getElementById("lastNameErrorMsg");
+    lastNameErrorMsg.innerHTML = "";
     return true;
   }
 }
@@ -235,7 +235,8 @@ function validAddress(inputAddress) {
     addressErrorMsg.innerHTML = "Merci d'ajouter une adresse postale";
     return false;
   } else {
-    console.log("address valide");
+    let addressErrorMsg = document.getElementById("addressErrorMsg");
+    addressErrorMsg.innerHTML = "";
     return true;
   }
 }
@@ -256,14 +257,12 @@ function validCity(inputCity) {
   } else {
     let cityErrorMsg = document.getElementById("cityErrorMsg");
     cityErrorMsg.innerHTML = "";
-    console.log("city valide");
     return true;
   }
 }
 //-----------fin/city-----------
 //-----------E-mail-----------
 let inputEmail = document.getElementById("email");
-console.log(inputEmail)
 inputEmail.addEventListener("change", function () {
   validEmail(this);
 });
@@ -278,7 +277,6 @@ function validEmail(inputEmail) {
   } else {
     let errorMessageEmail = document.getElementById("emailErrorMsg");
     errorMessageEmail.innerHTML = "";
-    console.log("email valide");
     return true;
   }
 }
