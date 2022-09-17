@@ -263,7 +263,7 @@ function validCity(inputCity) {
 //-----------fin/city-----------
 //-----------E-mail-----------
 let inputEmail = document.getElementById("email");
-console.log(inputEmail.value)
+console.log(inputEmail)
 inputEmail.addEventListener("change", function () {
   validEmail(this);
 });
@@ -283,8 +283,6 @@ function validEmail(inputEmail) {
   }
 }
 //-----------fin/E-mail-----------
-
-
 let order = document.getElementById("order");
 order.addEventListener("click", function (e) {
   e.preventDefault();
@@ -293,7 +291,7 @@ order.addEventListener("click", function (e) {
 
   if (products === null || products.length < 1) {
     alert("VOTRE PANIER EST VIDE");
-  } else if (validEmail(inputEmail && validCity(inputCity) && validAddress(inputAddress) && validLastName(inputLastName) && validfirstName(inputFirstName))) {
+  } else if (validEmail(inputEmail) && validCity(inputCity) && validAddress(inputAddress) && validLastName(inputLastName) && validfirstName(inputFirstName)) {
     const productsId = [];
     products.forEach((product) => {
       productsId.push(product.id);
