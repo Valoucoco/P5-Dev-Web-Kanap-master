@@ -63,7 +63,7 @@ button.addEventListener('click', function (e) {
   };
   console.log(color)
 let validator = true
-  if (color == 0){
+  if (color == 0 || quantityValue == 0){
     alert("Merci de choisir votre couleur ET votre nombre d'article");
     validator = false;
   }

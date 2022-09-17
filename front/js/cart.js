@@ -148,7 +148,7 @@ function loopTotalPrice(api, products) {
   if (products !== null) {
     for (let i = 0; i < products.length; i++){
         let product = products[i]
-        let apiProduct = api.find((item) => item.id === product._id)
+        let apiProduct = api.find((item) => item._id === product.id)
         sumPrice += apiProduct.price * product.quantity
     }
     document.getElementById("totalPrice").innerText = sumPrice;
@@ -177,34 +177,14 @@ function deleteItemSelect(api, products) {
         let productsJson = JSON.stringify(products);
         localStorage.setItem("products", productsJson);
         loopTotalPrice(api, products);
+        loopTotalQty(products)
       }
     });
+    loopTotalQty(products);
   });
 }
 
 //récupération du formulaire
-//-----------E-mail-----------
-let inputEmail = document.getElementById("email");
-inputEmail.addEventListener("change", function () {
-  validEmail(this);
-});
-function validEmail(inputEmail) {
-  //let emailRegex = new RegExp("^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$");
-  let emailRegex = new RegExp("^[A-Za-z-_.]([A-Za-z.])+@[A-Za-z]+.[A-Za-z]+$");
-
-  if (!emailRegex.test(inputEmail.value)) {
-    let errorMessageEmail = document.getElementById("emailErrorMsg");
-    errorMessageEmail.innerHTML = "Merci d'ajouter un Email valide";
-    console.log(errorMessageEmail)
-    return false;
-  } else {
-    let errorMessageEmail = document.getElementById("emailErrorMsg");
-    errorMessageEmail.innerHTML = "";
-    console.log("email valide");
-    return true;
-  }
-}
-//-----------fin/E-mail-----------
 //-----------firstName-----------
 let inputFirstName = document.getElementById("firstName");
 
@@ -279,6 +259,29 @@ function validCity(inputCity) {
   }
 }
 //-----------fin/city-----------
+//-----------E-mail-----------
+let inputEmail = document.getElementById("email");
+inputEmail.addEventListener("change", function () {
+  validEmail(this);
+});
+function validEmail(inputEmail) {
+  //let emailRegex = new RegExp("^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$");
+  let emailRegex = new RegExp("^[A-Za-z-_.]([A-Za-z.])+@[A-Za-z]+.[A-Za-z]+$");
+
+  if (!emailRegex.test(inputEmail.value)) {
+    let errorMessageEmail = document.getElementById("emailErrorMsg");
+    errorMessageEmail.innerHTML = "Merci d'ajouter un Email valide";
+    console.log(errorMessageEmail)
+    return false;
+  } else {
+    let errorMessageEmail = document.getElementById("emailErrorMsg");
+    errorMessageEmail.innerHTML = "";
+    console.log("email valide");
+    return true;
+  }
+}
+//-----------fin/E-mail-----------
+
 
 let order = document.getElementById("order");
 order.addEventListener("click", function (e) {
@@ -288,7 +291,7 @@ order.addEventListener("click", function (e) {
 
   if (products === null || products.length < 1) {
     alert("VOTRE PANIER EST VIDE");
-  } else if (validEmail(inputEmail)) {
+  } else if (validEmail(inputEmail && validCity(inputCity) && validAddress(inputAddress) && validLastName(inputLastName) && validfirstName(inputFirstName))) {
     const productsId = [];
     products.forEach((product) => {
       productsId.push(product.id);
