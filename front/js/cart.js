@@ -146,7 +146,6 @@ function loopTotalPrice(api, products) {
   
 
   if (products !== null) {
-    let test = products.map(element => {element})
     for (let i = 0; i < products.length; i++){
         let product = products[i]
         let apiProduct = api.find((item) => item.id === product._id)
