@@ -254,6 +254,8 @@ function validCity(inputCity) {
     cityErrorMsg.innerHTML = "Merci d'ajouter une ville valide";
     return false;
   } else {
+    let cityErrorMsg = document.getElementById("cityErrorMsg");
+    cityErrorMsg.innerHTML = "";
     console.log("city valide");
     return true;
   }
@@ -261,17 +263,17 @@ function validCity(inputCity) {
 //-----------fin/city-----------
 //-----------E-mail-----------
 let inputEmail = document.getElementById("email");
+console.log(inputEmail.value)
 inputEmail.addEventListener("change", function () {
   validEmail(this);
 });
 function validEmail(inputEmail) {
   //let emailRegex = new RegExp("^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$");
-  let emailRegex = new RegExp("^[A-Za-z-_.]([A-Za-z.])+@[A-Za-z]+.[A-Za-z]+$");
+  let emailRegex = new RegExp("^[A-Za-z-_]+@[A-Za-z]+.[A-Za-z]+$");
 
   if (!emailRegex.test(inputEmail.value)) {
     let errorMessageEmail = document.getElementById("emailErrorMsg");
     errorMessageEmail.innerHTML = "Merci d'ajouter un Email valide";
-    console.log(errorMessageEmail)
     return false;
   } else {
     let errorMessageEmail = document.getElementById("emailErrorMsg");
