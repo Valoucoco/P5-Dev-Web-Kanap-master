@@ -163,7 +163,7 @@ function deleteItemSelect(api, products) {
     item.addEventListener("click", function () {
       const product = item.closest("article");
       console.log(product)
-      //product.remove();
+      product.remove();
       const productId = product.dataset.id;
       const productColor = product.dataset.color;
       console.log(productColor)
