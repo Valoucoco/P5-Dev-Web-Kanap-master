@@ -1,7 +1,9 @@
+//je récupère l'URL pour modifier la chaine de requête et ajouter l'id du produit
 let url = window.location.href;
 url = new URL(url);
 let id = url.searchParams.get("id");
 
+//je récupère le produit avec l'id correspondant et je 
 function getProduct(id) {
   fetch(`http://localhost:3000/api/products/${id}`)
     .then(function (data) {
@@ -26,9 +28,8 @@ function getProduct(id) {
 
       // Ici on boucle sur le tableau car on dispose de plusieurs couleurs
       for (let color of product.colors) {
-        // On créer une variable color qui change à chaque tour de boucle
-
-        // On créer un élement option  + on lui attribut la données
+        
+        // On créer un élement option et on lui attribut la données
         let option = document.createElement("option");
         option.value = color;
         option.innerText = color;
@@ -44,7 +45,7 @@ let button = document.getElementById("addToCart")
 //j'écoute le clic pour lancer la fonction
 button.addEventListener('click', function (e) {
   e.preventDefault()
-  //j'ajoute une variable color quantityValue et productOrder avec l'id la quantité et la couleur
+  //j'ajoute une variable color, quantityValue et productOrder avec l'id la quantité et la couleur
   let colorInput = document.getElementById('colors')
   let color = colorInput.value;
   let quantityValue = parseInt(quantity.value);
@@ -61,12 +62,20 @@ button.addEventListener('click', function (e) {
       nameProduct: titleProduct,
       srcImage: srcImage,
   };
+  //je créé un validateur qui passe à false si un aucune couleur ou quantité n'est choisi
 let validator = true
-  if (color == 0 || quantityValue == 0){
-    alert("Merci de choisir votre couleur ET votre nombre d'article");
+  if (color == 0){
+    alert("Merci de choisir votre couleur");
     validator = false;
   }
-
+  if (quantityValue == 0){
+    alert("Merci de choisir la quantité d'article souhaité");
+    validator = false;
+  }
+  if (quantityValue > 100){
+    alert("Merci de choisir une quantité comprise entre 1 et 100");
+    validator = false;
+  }
 //je déclare ma variable cart le contenu de l'objet products
   let cart = localStorage.getItem('products');
 
@@ -91,7 +100,7 @@ let validator = true
       }
   }
 
-  //si nexItem est déclaré strictement vraie
+  //si newItem est déclaré strictement vraie
   if (newItem === true) {
       //j'ajoute l'élément productOrder
       cart.push(productOrder);

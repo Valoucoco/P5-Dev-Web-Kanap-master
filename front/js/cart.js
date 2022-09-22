@@ -104,7 +104,7 @@ function createProductCard(data, product) {
   contentSettingsDelete.appendChild(suppr);
   suppr.innerHTML = "Supprimer";
 }
-
+let validator = true;
 //change quantity
 function changeQty(api, products) {
   const inputs = document.querySelectorAll(".itemQuantity");
@@ -113,7 +113,14 @@ function changeQty(api, products) {
       const product = input.closest("article");
       const productId = product.dataset.id;
       const productColor = product.dataset.color;
-
+      let quantityInput = document.getElementById('itemQuantity');
+      let quantityValue = quantityInput.value;
+      if (quantityValue > 100){
+        alert('Merci de choisir une quantité comprise entre 1 et 100')
+        validator = false;
+      } else {
+          validator = true;
+        }
       if (
         products.some((e) => e.id === productId && e.color === productColor)
       ) {
@@ -123,6 +130,7 @@ function changeQty(api, products) {
         );
         products[objIndex].quantity = input.valueAsNumber;
       }
+      
       let productJson = JSON.stringify(products);
       localStorage.setItem("products", productJson);
       loopTotalQty(JSON.parse(productJson));
@@ -267,7 +275,6 @@ inputEmail.addEventListener("change", function () {
   validEmail(this);
 });
 function validEmail(inputEmail) {
-  //let emailRegex = new RegExp("^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$");
   let emailRegex = new RegExp("^[A-Za-z-_]+@[A-Za-z]+.[A-Za-z]+$");
 
   if (!emailRegex.test(inputEmail.value)) {
@@ -289,7 +296,7 @@ order.addEventListener("click", function (e) {
 
   if (products === null || products.length < 1) {
     alert("VOTRE PANIER EST VIDE");
-  } else if (validEmail(inputEmail) && validCity(inputCity) && validAddress(inputAddress) && validLastName(inputLastName) && validfirstName(inputFirstName)) {
+  } else if (validEmail(inputEmail) && validCity(inputCity) && validAddress(inputAddress) && validLastName(inputLastName) && validfirstName(inputFirstName)){
     const productsId = [];
     products.forEach((product) => {
       productsId.push(product.id);
@@ -305,7 +312,11 @@ order.addEventListener("click", function (e) {
       },
       products: productsId,
     };
+    if (validator == true){
     orderProducts(order);
+    } else {
+      alert('Merci de choisir une quantité comprise entre 1 et 100')
+    }
   }
 });
 
@@ -321,9 +332,9 @@ const orderProducts = (order) => {
     .then((data) => data.json())
     .then((data) => {
       const orderId = data.orderId;
-      finalisation(orderId);
+      clickCommander(orderId);
     });
-  function finalisation(orderId) {
+  function clickCommander(orderId) {
     localStorage.clear();
     document.location.href = `confirmation.html?id=${orderId}`;
   }
